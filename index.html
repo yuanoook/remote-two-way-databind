@@ -1,0 +1,105 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <title>远程数据绑定</title>
+    <script src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+    <script src="rango.tools.js"></script>
+<style>
+*{
+    font-family: "Lantinghei SC", "Lato Regular", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+body{
+    background: #f4f4f4;
+}
+h1{
+    font-size: 16px;
+}
+hr{
+    padding: 0;
+    height: 0;
+    border:1px solid white;
+}
+input,textarea{
+   width: 100%;
+   line-height: 20px;
+   border: 0;
+   outline: none;
+}
+textarea{
+    min-height: 100px;
+}
+fieldset{
+    border-color: white;
+    margin-bottom: 5px;
+}
+ul{
+    margin:0;
+}
+</style>
+</head>
+<body>
+<div rg-controller="countCtrl">
+    <h1>远程时间：{{ moment(remoteTime).format('MMMM Do YYYY, h:mm:ss.SSS a') }}</h1>
+    <h1>在线人数：{{ usercount }}</h1>
+    <h1>欢迎消息：{{ welcomeMessage }}</h1>
+    <h1>本地时间：{{ moment(localTime).format('MMMM Do YYYY, h:mm:ss.SSS a') }} </h1>
+
+    <hr/>
+
+    <h1>数据1：{{ anthing1 }}</h1>
+    <input rg-model="anthing1">
+    <h1>数据2：{{ anthing2 }}</h1>
+    <textarea rg-model="anthing2"></textarea>
+
+    <hr/>
+
+    <h1>TODO：</h1>
+    <fieldset>
+        <legend>服务器端</legend>
+        <ul>
+            <li>掉线用户清理方式优化；</li>
+            <li>数据生命周期设定：伴随连接，伴随内存，文件存储。（时间设定）</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>客户端</legend>
+        <ul>
+            <li>socket 掉线数据重联处理；</li>
+        </ul>
+    </fieldset>
+</div>
+
+<script>
+$(function(){
+    moment.locale('zh-cn');
+
+    App.controller('countCtrl',function($scope){
+        $scope.time = 0;
+        $scope.localTime = new Date().valueOf();
+
+        //绑定远程已经有的数据
+        $scope.$connect('welcomeMessage', 'welcomeMsg');
+
+        //绑定远程时间戳，查看实时人数
+        $scope.$connect('remoteTime', 'time');
+        $scope.$connect('usercount', 'usersCount');
+
+        //绑定任意新数据
+        $scope.$connect('anthing1', 'remoteData_anything1');
+        //绑定任意新数据
+        $scope.$connect('anthing2', 'remoteData_anything2');
+
+        setInterval(function(){
+            $scope.localTime = new Date().valueOf();
+        },1000);
+
+        window.x = $scope;
+    });
+});
+</script>
+
+</body>
+</html>
