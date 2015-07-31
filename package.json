@@ -1,0 +1,27 @@
+{
+  "name": "remote-two-way-databind",
+  "version": "0.0.1",
+  "description": "More powerful databind with remote devices，not just databind in single web page.",
+  "main": "app.js",
+  "dependencies": {
+    "ws": "^0.6.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuanoook/remote-two-way-databind.git"
+  },
+  "keywords": [
+    "databind",
+    "javascript"
+  ],
+  "author": "yuanoook@foxmail.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/yuanoook/remote-two-way-databind/issues"
+  },
+  "homepage": "https://github.com/yuanoook/remote-two-way-databind#readme"
+}
