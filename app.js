@@ -8,7 +8,7 @@ start();
 
 function start(){
     var server = http.createServer(onRequest);
-    server.listen( 8000 );
+    server.listen( 80 );
     
     function onRequest(request,response){
 
@@ -72,7 +72,7 @@ function res(response,code,content_type,content,isBinary){
 /******** SmartSocket.js *********/
 
 var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({ 8666 });
+    wss = new WebSocketServer( 8666 );
 
 var users = {};
 
