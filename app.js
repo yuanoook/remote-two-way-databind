@@ -4,7 +4,7 @@ var url = require('url');
 var fs = require('fs');
 
 //coding 环境不用跑静态页面，需要在 coding 项目里面配置环境变量 CODING = 1
-start();
+!process.env.CODING && start();
 
 function start(){
     var server = http.createServer(onRequest);
