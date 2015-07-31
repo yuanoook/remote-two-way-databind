@@ -72,14 +72,14 @@ function res(response,code,content_type,content,isBinary){
 /******** SmartSocket.js *********/
 
 var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer( 8666 );
+    wss = new WebSocketServer({port: process.env.PORT || 8666});
 
 var users = {};
 
-// if(process.env.CODING){
-//     console.log( 'Websocket server ready...')
-//     console.log( process.env.PORT );
-// }
+if(process.env.CODING){
+    console.log( 'Websocket server ready...')
+    console.log( process.env.PORT );
+}
 
 var dataContext = remoteDataFactory(function($scope){
 
