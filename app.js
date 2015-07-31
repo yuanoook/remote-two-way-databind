@@ -71,7 +71,10 @@ function res(response,code,content_type,content,isBinary){
 
 /******** SmartSocket.js *********/
 
-console.log( process.env.PORT );
+if(process.env.CODING){
+    console.log( 'Running in coding environment...')
+    console.log( process.env.PORT );
+} 
 
 var WebSocketServer = require('ws').Server,
 wss = new WebSocketServer({port: process.env.PORT || 8666}),
@@ -102,6 +105,12 @@ var dataContext = remoteDataFactory(function($scope){
 });
 
 wss.on('connection', function(ws) {
+
+    if(process.env.CODING){
+        console.log( 'Running in coding environment...')
+        console.log( 'Accept connection...' );
+    }
+
     var userId = idFactory();
     users[userId] = ws;
 
