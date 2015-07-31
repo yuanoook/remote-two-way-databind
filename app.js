@@ -4,7 +4,7 @@ var url = require('url');
 var fs = require('fs');
 
 //coding 环境不用跑静态页面，需要在 coding 项目里面配置环境变量 CODING = 1
-!process.env.CODING && start();
+start();
 
 function start(){
     var server = http.createServer(onRequest);
@@ -71,27 +71,15 @@ function res(response,code,content_type,content,isBinary){
 
 /******** SmartSocket.js *********/
 
-if(process.env.CODING){
-    console.log( 'Running in coding environment...')
-    console.log( process.env.PORT );
-}
+var WebSocketServer = require('ws').Server,
+    wss = new WebSocketServer({ 8666 });
 
-var WebSocketServer, wss, users = {};
+var users = {};
 
-try{
-
-    WebSocketServer = require('ws').Server;
-    wss = new WebSocketServer({port: process.env.PORT || 8666});
-}catch(err){
-    console.log( err );
-}
-
-users = {};
-
-if(process.env.CODING){
-    console.log( 'Websocket server ready...')
-    console.log( process.env.PORT );
-}
+// if(process.env.CODING){
+//     console.log( 'Websocket server ready...')
+//     console.log( process.env.PORT );
+// }
 
 var dataContext = remoteDataFactory(function($scope){
 
@@ -118,12 +106,6 @@ var dataContext = remoteDataFactory(function($scope){
 });
 
 wss.on('connection', function(ws) {
-
-    if(process.env.CODING){
-        console.log( 'Running in coding environment...')
-        console.log( 'Accept connection...' );
-    }
-
     var userId = idFactory();
     users[userId] = ws;
 
