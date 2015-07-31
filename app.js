@@ -74,11 +74,24 @@ function res(response,code,content_type,content,isBinary){
 if(process.env.CODING){
     console.log( 'Running in coding environment...')
     console.log( process.env.PORT );
-} 
+}
 
-var WebSocketServer = require('ws').Server,
-wss = new WebSocketServer({port: process.env.PORT || 8666}),
+var WebSocketServer, wss, users = {};
+
+try{
+
+    WebSocketServer = require('ws').Server;
+    wss = new WebSocketServer({port: process.env.PORT || 8666});
+}catch(err){
+    console.log( err );
+}
+
 users = {};
+
+if(process.env.CODING){
+    console.log( 'Websocket server ready...')
+    console.log( process.env.PORT );
+}
 
 var dataContext = remoteDataFactory(function($scope){
 
