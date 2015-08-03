@@ -213,7 +213,22 @@
     }
 }(window);
 
-// smartSocket.js 
+// HtmlStateMachine.js State Machine
++function(window){
+    window.htmlStateMachine = {
+        changeState: changeState
+    }
+
+    function changeState(who,status){
+        var classList = document.documentElement.classList;
+        classList = classList.filter(function( item ){
+            return item.indexOf( who + '-' ) !== 0;
+        });
+        classList.add( who + '-' + status );
+    }
+}(window);
+
+// smartSocket.js dependences: HtmlStateMachine.js
 +function(window){
     /*
         很大部分工作都是为了保证数据畅通
@@ -257,7 +272,8 @@
         });
 
         socket.onopen = function () {
-            console.log('我胡汉三又回来了，哈哈哈哈');
+            htmlStateMachine.changeState('webSocket','open');
+
             while( tasks.length ){
                 socket.sendOriginal( tasks.pop() );
             }
@@ -269,7 +285,8 @@
             listeners.push( func );
         }
         socket.onclose = function () {
-            console.log('不要断开，等等，我还会回来的');
+            htmlStateMachine.changeState('webSocket','close');
+
             setTimeout(function () {
                 window.smartSocket = socketFactory();
             }, 1000);
@@ -447,8 +464,8 @@
     }
 }(window);
 
-//smartBacker.js dependences: smartsocket.js
-//回调函数处理机制
+// smartBacker.js dependences: smartsocket.js
+// 回调函数处理机制
 +function(){
     var callbackList = {
         add: function( call ){

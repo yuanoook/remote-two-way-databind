@@ -7,7 +7,7 @@ var server;
 httpStart();
 function httpStart(){
     server = http.createServer(onRequest);
-    server.listen( 8000 );
+    server.listen( process.env.PORT || 8000 );
     
     function onRequest(request,response){
 
@@ -91,7 +91,6 @@ var dataContext = remoteDataFactory(function($scope){
             var count = 0;
             for( i in users ){
                 count ++;
-                console.log(i);
             }
             return count;
         }();
