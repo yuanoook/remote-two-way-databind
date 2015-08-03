@@ -221,7 +221,7 @@
 
     function changeState(who,status){
         var classList = document.documentElement.classList;
-        classList = classList.filter(function( item ){
+        classList = Array.prototype.filter.call(classList,function( item ){
             return item.indexOf( who + '-' ) !== 0;
         });
         classList.add( who + '-' + status );
