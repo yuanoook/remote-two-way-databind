@@ -221,9 +221,9 @@
 
     function changeState(who,status){
         var classList = document.documentElement.classList;
-        classList = Array.prototype.filter.call(classList,function( item ){
-            return item.indexOf( who + '-' ) !== 0;
-        });
+        for( i=classList.length-1; i>=0; i-- ){
+            classList[i].indexOf( who + '-' ) === 0 && Array.prototype.splice.call(classList,i,1);
+        }
         classList.add( who + '-' + status );
     }
 }(window);
@@ -272,7 +272,7 @@
         });
 
         socket.onopen = function () {
-            htmlStateMachine.changeState('webSocket','open');
+            htmlStateMachine.changeState('websocket','open');
 
             while( tasks.length ){
                 socket.sendOriginal( tasks.pop() );
@@ -285,7 +285,7 @@
             listeners.push( func );
         }
         socket.onclose = function () {
-            htmlStateMachine.changeState('webSocket','close');
+            htmlStateMachine.changeState('websocket','close');
 
             setTimeout(function () {
                 window.smartSocket = socketFactory();
