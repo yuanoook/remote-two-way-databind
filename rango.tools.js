@@ -5,7 +5,6 @@
     window.$ = $;
 
     function $(elem){
-
         /* 函数部分 */
         if(typeof elem=='function'){
             if( document.readyState == 'complete' ){
@@ -42,7 +41,6 @@
         }else{
             return new $$(elem);
         }
-
     }//$ end
 
     function $$(elem){
@@ -221,13 +219,15 @@
         很大部分工作都是为了保证数据畅通
         特别是断开连接和重新连接的时候保证数据不会丢失
     */
+    var connectTasks = [];
     var tasks = [];
     var listeners = [];
  
     window.smartSocket = socketFactory();
  
     function socketFactory() {
-        var url = /localhost/.test( location.host ) ? 'ws://localhost:8666' : 'ws://yuanoook.com:8666';
+        //这里的 url 配置和服务器端的配置是相对应的，服务器端是用的 http 服务和 websocket 服务共享端口的模式
+        var url = 'ws://' + location.host;
         var socket = new WebSocket( url );
  
         socket.sendOriginal = socket.send;
@@ -238,6 +238,14 @@
             } else {
                 tasks.push(data);
             }
+        }
+
+        socket.connectSend = function(data) {
+            data = typeof data == 'string' ? data : JSON.stringify(data);
+            if (socket.readyState == 1) {
+                socket.sendOriginal(data);
+            }
+            connectTasks.push(data);
         }
  
         socket.addEventListener('message', function (event) {
@@ -250,8 +258,11 @@
 
         socket.onopen = function () {
             console.log('我胡汉三又回来了，哈哈哈哈');
-            while (tasks.length) {
-                socket.send(tasks.pop());
+            while( tasks.length ){
+                socket.sendOriginal( tasks.pop() );
+            }
+            for( i in connectTasks ){
+                socket.sendOriginal( connectTasks[i] );
             }
         }
         socket.listen = function (func) {
@@ -589,7 +600,7 @@
             // $callback 是一个附加参数 id
             // 服务器端会原样返回
             // smartBacker 会自动接收 smartSocket的消息，并且执行回调
-            smartSocket.send({
+            smartSocket.connectSend({
                 $watch: remoteName,
                 $callback: smartBacker(function( msg ){
                     var err = msg.$err;

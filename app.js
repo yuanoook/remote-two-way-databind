@@ -2,13 +2,12 @@
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
+var server;
 
-//coding 环境不用跑静态页面，需要在 coding 项目里面配置环境变量 CODING = 1
-!process.env.CODING && start();
-
-function start(){
-    var server = http.createServer(onRequest);
-    server.listen( 80 );
+httpStart();
+function httpStart(){
+    server = http.createServer(onRequest);
+    server.listen( 8000 );
     
     function onRequest(request,response){
 
@@ -47,39 +46,34 @@ function start(){
             }
         });
     }
-}
 
-function resHtml(response, content){
-    content =   "<!doctype>\
-                <html>\
-                <head>\
-                    <meta charset='utf-8'>\
-                </head>\
-                <body>"
-                    + content +
-                "</body>\
-                </html>\
-                ";
-    res(response, 200, 'text/html' ,content);
-}
+    function resHtml(response, content){
+        content =   "<!doctype>\
+                    <html>\
+                    <head>\
+                        <meta charset='utf-8'>\
+                    </head>\
+                    <body>"
+                        + content +
+                    "</body>\
+                    </html>\
+                    ";
+        res(response, 200, 'text/html' ,content);
+    }
 
-function res(response,code,content_type,content,isBinary){
-    response.writeHead(code, {'Content-Type':content_type});
-    isBinary ? response.write(content, 'binary') : response.write(content);
-    response.end();
+    function res(response,code,content_type,content,isBinary){
+        response.writeHead(code, {'Content-Type':content_type});
+        isBinary ? response.write(content, 'binary') : response.write(content);
+        response.end();
+    }
 }
 
 /******** SmartSocket.js *********/
-
 var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({port: process.env.PORT || 8666});
-
+    wss = new WebSocketServer({
+        server: server
+    });
 var users = {};
-
-if(process.env.CODING){
-    console.log( 'Websocket server ready...')
-    console.log( process.env.PORT );
-}
 
 var dataContext = remoteDataFactory(function($scope){
 
@@ -106,6 +100,7 @@ var dataContext = remoteDataFactory(function($scope){
 });
 
 wss.on('connection', function(ws) {
+    console.log('正在连接');
     var userId = idFactory();
     users[userId] = ws;
 
