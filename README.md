@@ -33,8 +33,11 @@ Please open two or more Browser windows to feel it.
 #### html
 
     <script src="twrdb.client.js"></script>
-    <input rg-model = 'localDataKey'>
-    <p>{{ localDataKey }}</p>
+
+    <div rg-contoller="twrdbCtrl">
+        <input rg-model = 'localDataKey'>
+        <p>{{ localDataKey }}</p>
+    </div>
 
 #### javascript     
  
