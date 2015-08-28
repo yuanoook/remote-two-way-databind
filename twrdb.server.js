@@ -11,8 +11,8 @@ function httpStart(){
     
     function onRequest(request,response){
 
-            client_path = decodeURI( request.url ).replace(/\?.*$/,'');
-            server_path = '.' + client_path;
+            var client_path = decodeURI( request.url ).replace(/\?.*$/,'');
+            var server_path = '.' + client_path;
 
             fs.readFile( server_path, 'binary', function(err,file){
             if(err){
@@ -39,8 +39,10 @@ function httpStart(){
                     'png':'image/png',
                     'jpg':'image/jpg',
                     'jpeg':'image/jpeg',
-                    'svg':'image/svg+xml'
-                }[request.url.replace(/^.*\./,'')];
+                    'svg':'image/svg+xml',
+                    'xml':'text/xml',
+                    'ico':'image/x-icon'
+                }[client_path.replace(/^.*\./,'')];
 
                 res(response, 200, type ,file ,true)
             }
