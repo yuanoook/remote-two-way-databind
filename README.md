@@ -6,7 +6,7 @@
 DEMO: [http://twrdb.coding.io/index.html](http://twrdb.coding.io/index.html) 
 Please open two or more Browser windows to feel it.
 
-![Twrdb.js](http://yuanoook.com/file?hash=e3854bd691b3b08e040caf4179e56f23)
+![Twrdb.js](https://raw.githubusercontent.com/yuanoook/remote-two-way-databind/master/twrdb.demo.png)
 
 ## How to use it?
 ### Server side
